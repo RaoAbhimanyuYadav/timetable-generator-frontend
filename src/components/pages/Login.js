@@ -12,8 +12,16 @@ import LoginIcon from "@mui/icons-material/Login";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+// import axios from "axios";
+import Axios from "../Api";
 
 function Copyright(props) {
+  const body = {
+    username: "rao",
+    password: "123",
+  };
+  Axios.post("login/token/", body).then((response) => console.log(response));
+
   return (
     <Typography
       variant="body2"
