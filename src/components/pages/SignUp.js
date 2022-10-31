@@ -3,16 +3,14 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import { Link, useNavigate } from "react-router-dom";
+import Axios from "../Api";
 function Copyright(props) {
   return (
     <Typography
@@ -22,9 +20,6 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -34,13 +29,23 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const body = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+      username: data.get("email"),
+      first_name: data.get("firstName"),
+      last_name: data.get("lastName"),
+    };
+    Axios.post("register/", body)
+      .then((response) => {
+        localStorage.setItem("authToken", JSON.stringify(response.data));
+        return navigate("/");
+      })
+      .catch((err) => console.log(err.response.data.detail));
   };
 
   return (
@@ -110,14 +115,11 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
+              {/* <Grid item xs={12} sx={{ paddingTop: "0 !important" }}>
+                <Typography sx={{ fontSize: "12px", color: "gray" }}>
+                  Password should be greater or equal to 8 character
+                </Typography>
+              </Grid> */}
             </Grid>
             <Button
               type="submit"
@@ -128,10 +130,13 @@ export default function SignUp() {
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+              <Grid
+                item
+                sx={{
+                  "& > a": { textDecoration: "none", color: "blue" },
+                }}
+              >
+                <Link to="/login">Already have an account? Sign in</Link>
               </Grid>
             </Grid>
           </Box>
