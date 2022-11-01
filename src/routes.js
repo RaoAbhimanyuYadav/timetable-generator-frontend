@@ -12,21 +12,19 @@ import Timing from "./components/pages/Timing";
 
 const routes = () => {
   return (
-    <>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/year" element={<Year />} />
-          <Route path="/professor" element={<Professor />} />
-          <Route path="/subject" element={<Subject />} />
-          <Route path="/timing" element={<Timing />} />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/year" element={<Year />} />
+        <Route path="/professor" element={<Professor />} />
+        <Route path="/subject" element={<Subject />} />
+        <Route path="/timing" element={<Timing />} />
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

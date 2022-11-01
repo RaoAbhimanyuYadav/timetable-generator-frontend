@@ -1,13 +1,87 @@
-import { Button, Typography } from "@mui/material";
-import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import AddEditDialog from "./AddEditDialog";
 
-const TableLayout = () => {
+import ConfirmDelete from "./ConfirmDelete";
+
+const TableLayout = ({
+  data,
+  bodyDataKey,
+  headData,
+  deleteHandler,
+  formInfo,
+  formSubmitHandler,
+}) => {
+  console.log(data);
+
+  const objNameExtractor = (obj) => {
+    let name = "";
+    bodyDataKey.forEach((instance) => {
+      name += obj[instance] + " ";
+    });
+    return name;
+  };
+
   return (
-    <div>
-      <Typography>10:00 11:00 MOnday</Typography>
-      <Button>Edit</Button>
-      <Button>Delete</Button>
-    </div>
+    <>
+      {data.length === 0 ? (
+        <>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {headData.map((instance, index) => {
+                  return <TableCell key={index}>{instance}</TableCell>;
+                })}
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+        </>
+      ) : (
+        <Table>
+          <TableHead>
+            <TableRow>
+              {headData.map((instance, index) => {
+                return <TableCell key={index}>{instance}</TableCell>;
+              })}
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {data.map((obj) => {
+              return (
+                <TableRow key={obj.id}>
+                  {bodyDataKey.map((instance, index) => {
+                    return <TableCell key={index}>{obj[instance]}</TableCell>;
+                  })}
+                  <TableCell>
+                    <AddEditDialog
+                      formInfo={formInfo}
+                      formSubmitHandler={formSubmitHandler}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <ConfirmDelete
+                      objName={objNameExtractor(obj)}
+                      id={obj.id}
+                      deleteHandler={deleteHandler}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      )}
+    </>
   );
 };
 

@@ -88,11 +88,11 @@ function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <Link to={`${page.toLowerCase()}`}>
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem onClick={handleCloseNavMenu} key={page}>
+                  <Link to={`${page.toLowerCase()}`}>
                     <Typography textAlign="center">{page}s</Typography>
-                  </MenuItem>
-                </Link>
+                  </Link>
+                </MenuItem>
               ))}
             </Menu>
           </Box>
@@ -101,8 +101,6 @@ function Navbar() {
             <Typography
               variant="h5"
               noWrap
-              component="a"
-              href=""
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },
@@ -119,9 +117,8 @@ function Navbar() {
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link to={`${page.toLowerCase()}`}>
+              <Link to={`${page.toLowerCase()}`} key={page}>
                 <Button
-                  key={page}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
