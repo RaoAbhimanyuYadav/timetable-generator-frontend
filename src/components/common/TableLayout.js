@@ -66,6 +66,7 @@ const TableLayout = ({
                     <AddEditDialog
                       formInfo={formInfo}
                       formSubmitHandler={formSubmitHandler}
+                      formData={obj}
                     />
                   </TableCell>
                   <TableCell>

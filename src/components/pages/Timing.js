@@ -57,12 +57,18 @@ const Timing = () => {
       .catch((err) => console.log(err));
   };
 
-  const formSubmitHandler = (data) => {
-    Axios.post("timing/", data)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => console.log(err.response.data.detail));
+  const formSubmitHandler = (data, isEdited, id) => {
+    isEdited
+      ? Axios.put("timing/", { ...data, id: id })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((err) => console.log(err.response.data.detail))
+      : Axios.post("timing/", data)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((err) => console.log(err.response.data.detail));
   };
 
   return (

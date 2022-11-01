@@ -15,6 +15,7 @@ export default function AddEditDialog({
   formInfo.forEach((obj) => {
     body[obj.key] = formData ? formData[obj.key] : obj.default;
   });
+
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState(body);
 
@@ -24,6 +25,9 @@ export default function AddEditDialog({
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleClear = () => {
+    setData(body);
   };
 
   const handleOnChange = (e, key) => {
@@ -36,12 +40,16 @@ export default function AddEditDialog({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    formSubmitHandler(data);
+    formData
+      ? formSubmitHandler(data, true, formData.id)
+      : formSubmitHandler(data, false);
   };
 
   return (
     <div>
-      <Button onClick={handleClickOpen("paper")}>Edit</Button>
+      <Button onClick={handleClickOpen("paper")}>
+        {formData ? "Edit" : "Add"}
+      </Button>
       <Dialog
         maxWidth="xs"
         fullWidth="xs"
@@ -51,7 +59,9 @@ export default function AddEditDialog({
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title">Subscribe</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">
+          {formData ? "Edit" : "Add"}
+        </DialogTitle>
         <DialogContent dividers={true}>
           <Box
             component="form"
@@ -105,7 +115,14 @@ export default function AddEditDialog({
             })}
 
             <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
+              <Button
+                onClick={() => {
+                  handleClose();
+                  handleClear();
+                }}
+              >
+                Cancel
+              </Button>
               <Button type="submit" onClick={handleClose}>
                 Submit
               </Button>
