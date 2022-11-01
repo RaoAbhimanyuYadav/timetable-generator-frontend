@@ -1,38 +1,31 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import RoomForm from "./components/pages/RoomForm";
 import Navbar from "./components/HOC/Navbar";
 import ErrorPage from "./components/common/ErrorPage";
 import HomePage from "./components/pages/HomePage";
 import Login from "./components/pages/Login";
 import SignUp from "./components/pages/SignUp";
-
-const router = createBrowserRouter([
-  {
-    path: "",
-    element: <HomePage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "room/",
-    element: <RoomForm />,
-  },
-  {
-    path: "login/",
-    element: <Login />,
-  },
-  {
-    path: "signup/",
-    element: <SignUp />,
-  },
-]);
+import Year from "./components/pages/Year";
+import Professor from "./components/pages/Professor";
+import Subject from "./components/pages/Subject";
+import Timing from "./components/pages/Timing";
 
 const routes = () => {
   return (
     <>
-      <Navbar />
-
-      <RouterProvider router={router} />
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/year" element={<Year />} />
+          <Route path="/professor" element={<Professor />} />
+          <Route path="/subject" element={<Subject />} />
+          <Route path="/timing" element={<Timing />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };
