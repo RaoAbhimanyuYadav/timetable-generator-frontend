@@ -9,6 +9,7 @@ import Year from "./components/pages/Year";
 import Professor from "./components/pages/Professor";
 import Subject from "./components/pages/Subject";
 import Timing from "./components/pages/Timing";
+import GenerateTimeTable from "./components/pages/GenerateTimeTable";
 
 const routes = () => {
   return (
@@ -22,6 +23,7 @@ const routes = () => {
         <Route path="/professor" element={<Professor />} />
         <Route path="/subject" element={<Subject />} />
         <Route path="/timing" element={<Timing />} />
+        <Route path="/generate" element={<GenerateTimeTable />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>

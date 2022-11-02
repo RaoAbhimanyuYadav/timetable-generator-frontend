@@ -60,7 +60,7 @@ export default function AddEditDialog({
       </Button>
       <Dialog
         maxWidth="xs"
-        fullWidth="xs"
+        fullWidth={true}
         open={open}
         onClose={handleClose}
         scroll={"paper"}
