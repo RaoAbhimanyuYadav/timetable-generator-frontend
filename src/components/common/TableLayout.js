@@ -17,8 +17,6 @@ const TableLayout = ({
   formInfo,
   formSubmitHandler,
 }) => {
-  console.log(data);
-
   const objNameExtractor = (obj) => {
     let name = "";
     bodyDataKey.forEach((instance) => {
