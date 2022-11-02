@@ -4,69 +4,55 @@ import React, { useEffect, useState } from "react";
 import TableLayout from "../common/TableLayout";
 import Axios from "../Api";
 import AddEditDialog from "../common/AddEditDialog";
+import {
+  bodyDataKey,
+  URL,
+  formInfo,
+  headData,
+} from "../constants/timingConstant";
+
+const getData = (setData) => {
+  Axios.get(URL)
+    .then((res) => {
+      if (res.status === 200) {
+        setData(res.data);
+      }
+    })
+    .catch((err) => console.log(err));
+};
 
 const Timing = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    Axios.get("timing/")
-      .then((res) => {
-        if (res.status === 200) {
-          setData(res.data);
-        }
-      })
-      .catch((err) => console.log(err));
+    getData(setData);
   }, []);
-
-  const bodyDataKey = ["day", "time_from", "time_to"];
-  const headData = ["Day", "From", "To"];
-  const formInfo = [
-    {
-      label: "Day",
-      type: "select",
-      choices: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thrusday",
-        "Friday",
-        "Saturday",
-      ],
-      key: "day",
-      default: "Monday",
-    },
-    {
-      label: "From",
-      type: "time",
-      key: "time_from",
-      default: "00:00",
-    },
-    {
-      label: "To",
-      type: "time",
-      key: "time_to",
-      default: "00:00",
-    },
-  ];
 
   const deleteHandler = (id) => {
     const body = { id: id };
-    console.log(body);
-    Axios.delete("timing/", { data: body })
-      .then((res) => console.log(res))
+    Axios.delete(URL, { data: body })
+      .then((res) => {
+        if (res.status === 200) {
+          getData(setData);
+        }
+      })
       .catch((err) => console.log(err));
   };
 
   const formSubmitHandler = (data, isEdited, id) => {
     isEdited
-      ? Axios.put("timing/", { ...data, id: id })
+      ? Axios.put(URL, { ...data, id: id })
           .then((response) => {
-            console.log(response);
+            if (response.status === 200) {
+              getData(setData);
+            }
           })
           .catch((err) => console.log(err.response.data.detail))
-      : Axios.post("timing/", data)
+      : Axios.post(URL, data)
           .then((response) => {
-            console.log(response);
+            if (response.status === 200) {
+              getData(setData);
+            }
           })
           .catch((err) => console.log(err.response.data.detail));
   };
