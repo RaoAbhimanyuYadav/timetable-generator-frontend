@@ -58,7 +58,15 @@ const TableLayout = ({
               return (
                 <TableRow key={obj.id}>
                   {bodyDataKey.map((instance, index) => {
-                    return <TableCell key={index}>{obj[instance]}</TableCell>;
+                    return (
+                      <TableCell key={index}>
+                        {typeof obj[instance] !== "object"
+                          ? obj[instance]
+                          : instance === "teacher"
+                          ? `${obj[instance].name}(${obj[instance].nick_name})`
+                          : `${obj[instance].semester}, ${obj[instance].room}`}
+                      </TableCell>
+                    );
                   })}
                   <TableCell>
                     <AddEditDialog

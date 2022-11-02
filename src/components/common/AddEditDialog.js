@@ -5,6 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box, InputLabel, MenuItem, TextField } from "@mui/material";
+import AsyncSelect from "./AsyncSelect";
 
 export default function AddEditDialog({
   formInfo,
@@ -13,7 +14,9 @@ export default function AddEditDialog({
 }) {
   const body = {};
   formInfo.forEach((obj) => {
-    body[obj.key] = formData ? formData[obj.key] : obj.default;
+    obj.key === "object"
+      ? (body[obj.id] = formData ? formData[obj.objectKey]["id"] : obj.default)
+      : (body[obj.key] = formData ? formData[obj.key] : obj.default);
   });
 
   const [open, setOpen] = React.useState(false);
@@ -30,16 +33,21 @@ export default function AddEditDialog({
     setData(body);
   };
 
-  const handleOnChange = (e, key) => {
+  const handleOnChange = (e, key, obj) => {
     setData((pre) => {
       let newData = { ...pre };
-      newData[key] = e.target.value;
+      if (key === "object") {
+        newData[obj.id] = e.target.value;
+      } else {
+        newData[key] = e.target.value;
+      }
       return newData;
     });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(data);
     formData
       ? formSubmitHandler(data, true, formData.id)
       : formSubmitHandler(data, false);
@@ -72,7 +80,16 @@ export default function AddEditDialog({
             {formInfo.map((obj, index) => {
               return (
                 <Box key={index}>
-                  {obj.type === "select" ? (
+                  {obj.type === "AsyncChoices" ? (
+                    <>
+                      <InputLabel>{obj.label}</InputLabel>
+                      <AsyncSelect
+                        obj={obj}
+                        handleOnChange={handleOnChange}
+                        data={data}
+                      />
+                    </>
+                  ) : obj.type === "select" ? (
                     <>
                       <InputLabel>{obj.label}</InputLabel>
                       <TextField
@@ -81,7 +98,7 @@ export default function AddEditDialog({
                         id={obj.key}
                         name={obj.key}
                         onChange={(e) => {
-                          handleOnChange(e, obj.key);
+                          handleOnChange(e, obj.key, obj);
                         }}
                         value={data[obj.key]}
                       >
@@ -104,7 +121,7 @@ export default function AddEditDialog({
                         name={obj.key}
                         autoFocus={index === 0}
                         onChange={(e) => {
-                          handleOnChange(e, obj.key);
+                          handleOnChange(e, obj.key, obj);
                         }}
                         value={data[obj.key]}
                       />
