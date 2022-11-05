@@ -134,10 +134,11 @@ const GenerateTimeTable = () => {
           <TableCell></TableCell>
           {timeTable.length > 0 &&
             timeTable.map((day, i) => {
-              if (i == 0)
+              if (i === 0)
                 return day.timeSlots.map((slot, i) => {
                   return <TableCell key={i}>{slot.time}</TableCell>;
                 });
+              return "";
             })}
         </TableRow>
       </TableHead>
