@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Grid,
   Table,
@@ -10,6 +10,7 @@ import {
 
 import Axios from "../Api";
 import Cell from "../common/Cell";
+import ReactToPrint from "react-to-print";
 
 class Year {
   constructor({ semester }) {
@@ -126,43 +127,52 @@ const GenerateTimeTable = () => {
   React.useEffect(() => {
     dataCreator();
   }, []);
-
+  const componentRef = useRef();
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell></TableCell>
-          {timeTable.length > 0 &&
-            timeTable.map((day, i) => {
-              if (i === 0)
-                return day.timeSlots.map((slot, i) => {
-                  return <TableCell key={i}>{slot.time}</TableCell>;
-                });
-              return "";
-            })}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {timeTable.map((day) => {
-          return (
-            <TableRow key={day.day}>
-              <TableCell>{day.day}</TableCell>
-              {day.timeSlots.map((timeSlot, i) => {
-                return (
-                  <TableCell key={i}>
-                    <Grid container>
-                      {timeSlot.years.map((year, i) => {
-                        return <Cell key={i} subject={year} />;
-                      })}
-                    </Grid>
-                  </TableCell>
-                );
-              })}
+    <>
+      <ReactToPrint
+        trigger={() => <button>Print this out!</button>}
+        content={() => componentRef.current}
+      />
+      <div ref={componentRef}>
+        <h1 style={{ textAlign: "center" }}>table</h1>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              {timeTable.length > 0 &&
+                timeTable.map((day, i) => {
+                  if (i === 0)
+                    return day.timeSlots.map((slot, i) => {
+                      return <TableCell key={i}>{slot.time}</TableCell>;
+                    });
+                  return "";
+                })}
             </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+          </TableHead>
+          <TableBody>
+            {timeTable.map((day) => {
+              return (
+                <TableRow key={day.day}>
+                  <TableCell>{day.day}</TableCell>
+                  {day.timeSlots.map((timeSlot, i) => {
+                    return (
+                      <TableCell key={i}>
+                        <Grid container>
+                          {timeSlot.years.map((year, i) => {
+                            return <Cell key={i} subject={year} />;
+                          })}
+                        </Grid>
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 };
 
