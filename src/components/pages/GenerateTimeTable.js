@@ -1,6 +1,15 @@
 import React from "react";
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 import Axios from "../Api";
+import Cell from "../common/Cell";
 
 class Year {
   constructor({ semester }) {
@@ -60,6 +69,8 @@ class Subject {
 }
 
 const GenerateTimeTable = () => {
+  const [timeTable, setTimeTable] = React.useState([]);
+
   const dataCreator = async () => {
     let subjectData = await Axios.get("subject/").then((resp) => {
       return resp.data;
@@ -83,9 +94,9 @@ const GenerateTimeTable = () => {
       .map((x) => x.time_from)
       .filter((x, i, arr) => arr.findIndex((item) => item === x) === i);
 
-    console.log(daysAvailable, timingAvailable);
+    // console.log(daysAvailable, timingAvailable);
 
-    let timeTable = daysAvailable.map((day) => {
+    let timeTableArray = daysAvailable.map((day) => {
       return new Day({
         day: day,
         time: timingAvailable,
@@ -95,27 +106,63 @@ const GenerateTimeTable = () => {
 
     for (let k = 0; k < subjectsArray.length; k++) {
       const subject = subjectsArray[k];
-      console.log(subject);
+      // console.log(subject);
 
       while (subject.totalLectures > 0) {
-        console.log(subject.totalLectures);
-        for (let i = 0; i < timeTable.length; i++) {
-          const day = timeTable[i];
-          console.log(day);
+        // console.log(subject.totalLectures);
+        for (let i = 0; i < timeTableArray.length; i++) {
+          const day = timeTableArray[i];
+          // console.log(day);
           if (subject.totalLectures <= 0) break;
 
           day.addSubject(subject);
         }
       }
     }
-    console.log(timeTable);
+    console.log(timeTableArray);
+    setTimeTable(timeTableArray);
   };
 
   React.useEffect(() => {
     dataCreator();
   }, []);
 
-  return <div>GenerateTimeTable</div>;
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell></TableCell>
+          {timeTable.length > 0 &&
+            timeTable.map((day, i) => {
+              if (i == 0)
+                return day.timeSlots.map((slot, i) => {
+                  return <TableCell key={i}>{slot.time}</TableCell>;
+                });
+            })}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {timeTable.map((day) => {
+          return (
+            <TableRow key={day.day}>
+              <TableCell>{day.day}</TableCell>
+              {day.timeSlots.map((timeSlot, i) => {
+                return (
+                  <TableCell key={i}>
+                    <Grid container>
+                      {timeSlot.years.map((year, i) => {
+                        return <Cell key={i} subject={year} />;
+                      })}
+                    </Grid>
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+  );
 };
 
 export default GenerateTimeTable;
