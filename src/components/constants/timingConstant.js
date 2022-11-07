@@ -1,6 +1,20 @@
-export const bodyDataKey = ["day", "time_from", "time_to"];
+export const bodyDataKey = [
+  "day",
+  "start_time",
+  "end_time",
+  "skip_start_time",
+  "skip_end_time",
+  "one_slot_interval",
+];
 export const URL = "timing/";
-export const headData = ["Day", "From", "To"];
+export const headData = [
+  "Day",
+  "From",
+  "To",
+  "Lunch Start Time",
+  "Lunch End Time",
+  "One Time slot",
+];
 export const formInfo = [
   {
     label: "Day",
@@ -17,15 +31,33 @@ export const formInfo = [
     default: "Monday",
   },
   {
-    label: "From",
+    label: "Start Time",
     type: "time",
-    key: "time_from",
-    default: "00:00",
+    key: "start_time",
+    default: "08:00:00",
   },
   {
-    label: "To",
+    label: "End Time",
     type: "time",
-    key: "time_to",
-    default: "00:00",
+    key: "end_time",
+    default: "18:00:00",
+  },
+  {
+    label: "Lunch Start Time",
+    type: "time",
+    key: "skip_start_time",
+    default: "12:00:00",
+  },
+  {
+    label: "Lunch End Time",
+    type: "time",
+    key: "skip_end_time",
+    default: "14:00:00",
+  },
+  {
+    label: "One Time slot",
+    type: "time",
+    key: "one_slot_interval",
+    default: "01:00:00",
   },
 ];

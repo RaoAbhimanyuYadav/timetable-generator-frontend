@@ -2,6 +2,7 @@ export const bodyDataKey = [
   "name",
   "code",
   "lecture_in_a_week",
+  "slot_required",
   "teacher",
   "year",
 ];
@@ -11,6 +12,7 @@ export const headData = [
   "Name",
   "Subject Code",
   "Lectures in a week",
+  "Slot Required",
   "Teacher",
   "Semester, Room Number",
 ];
@@ -31,7 +33,13 @@ export const formInfo = [
     label: "Lectures in a week",
     type: "number",
     key: "lecture_in_a_week",
-    default: "0",
+    default: "1",
+  },
+  {
+    label: "Lectures in a week",
+    type: "number",
+    key: "slot_required",
+    default: "1",
   },
   {
     label: "Professor",
