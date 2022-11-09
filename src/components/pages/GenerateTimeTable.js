@@ -114,8 +114,20 @@ class Day {
     return Math.floor((this.endTime - this.startTime) / this.oneSlotTime);
   }
 
-  addSubject(subject) {
-    for (let j = 0; j < this.timeSlots.length; j++) {
+  addSubject(subject, count) {
+    let timeSlotIndex = 0;
+    if (count < 5) {
+      timeSlotIndex = subject.timeSlotAllotedIndex || 0;
+    }
+
+    for (let j = timeSlotIndex; j < this.timeSlots.length; j++) {
+      if (
+        count < 5 &&
+        j !== timeSlotIndex &&
+        subject.timeSlotAllotedIndex !== null
+      )
+        break;
+
       const timeSlot = this.timeSlots[j];
       if (timeSlot.isLunch) continue;
 
@@ -147,6 +159,8 @@ class Day {
         timeSlot.years[yearIndex].subjectCode = subject.subjectCode;
         timeSlot.years[yearIndex].professorNickName = subject.professorNickName;
       }
+      // console.log(subject.subjectCode);
+      subject.timeSlotAllotedIndex = j;
       subject.totalLectures--;
       return true;
     }
@@ -164,11 +178,13 @@ class Subject {
     this.subjectName = subject.name;
     this.ProfessorName = subject.teacher.name;
     this.roomNumber = subject.year.room;
+    this.timeSlotAllotedIndex = null;
   }
 }
 
 const GenerateTimeTable = () => {
   const [timeTable, setTimeTable] = React.useState([]);
+  const [year, setYear] = React.useState(["1", "3", "5", "7"]);
 
   const dataCreator = async () => {
     let subjectResponse = await Axios.get("subject/").then((resp) => {
@@ -206,11 +222,10 @@ const GenerateTimeTable = () => {
         }
         for (let i = 0; i < timeTableArray.length; i++) {
           const day = timeTableArray[i];
-          // console.log(day);
           if (subject.totalLectures <= 0) break;
           if (day.labInfo[subject.semester] && subject.slotRequired > 1)
             continue;
-          day.addSubject(subject);
+          day.addSubject(subject, count);
         }
         count++;
       }
@@ -232,42 +247,50 @@ const GenerateTimeTable = () => {
         content={() => componentRef.current}
       />
       <div ref={componentRef}>
-        <h1 style={{ textAlign: "center" }}>table</h1>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              {timeTable.length > 0 &&
-                timeTable.map((day, i) => {
-                  if (i === 0)
-                    return day.timeSlots.map((slot, i) => {
-                      return <TableCell key={i}>{slot.time}</TableCell>;
-                    });
-                  return "";
-                })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {timeTable.map((day) => {
-              return (
-                <TableRow key={day.day}>
-                  <TableCell>{day.day}</TableCell>
-                  {day.timeSlots.map((timeSlot, i) => {
+        {year.map((year, index) => {
+          return (
+            <div key={index}>
+              <h1 style={{ textAlign: "center" }}>table {year}</h1>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    {timeTable.length > 0 &&
+                      timeTable.map((day, i) => {
+                        if (i === 0)
+                          return day.timeSlots.map((slot, i) => {
+                            return <TableCell key={i}>{slot.time}</TableCell>;
+                          });
+                        return "";
+                      })}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {timeTable.map((day) => {
                     return (
-                      <TableCell key={i}>
-                        <Grid container>
-                          {timeSlot.years.map((year, i) => {
-                            return <Cell key={i} subject={year} />;
-                          })}
-                        </Grid>
-                      </TableCell>
+                      <TableRow key={day.day}>
+                        <TableCell>{day.day}</TableCell>
+                        {day.timeSlots.map((timeSlot, i) => {
+                          return (
+                            <TableCell key={i}>
+                              <Grid container>
+                                {timeSlot.years.map((year, i) => {
+                                  if (i === index)
+                                    return <Cell key={i} subject={year} />;
+                                  else return "";
+                                })}
+                              </Grid>
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
                     );
                   })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                </TableBody>
+              </Table>
+            </div>
+          );
+        })}
       </div>
     </>
   );
