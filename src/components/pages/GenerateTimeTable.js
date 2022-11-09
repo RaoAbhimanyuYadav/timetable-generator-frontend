@@ -16,7 +16,7 @@ class Year {
   constructor({ year, isLunch }) {
     this.semester = year.semester;
     this.subjectCode = isLunch ? "LUNCH" : null;
-    this.teacherNickName = isLunch ? "" : null;
+    this.professorNickName = isLunch ? "" : null;
     this.roomNumber = year.room;
   }
 }
@@ -42,6 +42,7 @@ class Day {
     this.lunchTimeEnd = this.intoMinutes(day.skip_end_time);
     this.oneSlotTime = this.intoMinutes(day.one_slot_interval);
     this.totalSlots = this.calculateSlots();
+    this.labInfo = this.createObject(years);
     this.timeSlots = Array(this.totalSlots)
       .fill(0)
       .map((time, index) => {
@@ -51,6 +52,14 @@ class Day {
           years: years,
         });
       });
+  }
+
+  createObject(years) {
+    let obj = {};
+    years.forEach((year) => {
+      obj[year.semester] = false;
+    });
+    return obj;
   }
 
   isContinousAvailable(index, totalReq, subject) {
@@ -66,7 +75,7 @@ class Day {
       if (timeSlot.years[yearIndex].subjectCode !== null) return false;
 
       let teacherIndex = timeSlot.years.findIndex(
-        (year) => year.teacherNickName === subject.teacherNickName
+        (year) => year.professorNickName === subject.professorNickName
       );
       if (teacherIndex !== -1) return false;
 
@@ -116,7 +125,7 @@ class Day {
       if (timeSlot.years[yearIndex].subjectCode !== null) continue;
 
       let teacherIndex = timeSlot.years.findIndex(
-        (year) => year.teacherNickName === subject.teacherNickName
+        (year) => year.professorNickName === subject.professorNickName
       );
       if (teacherIndex !== -1) continue;
 
@@ -128,14 +137,15 @@ class Day {
               (year) => year.semester === subject.semester
             );
             slot.years[yearInd].subjectCode = subject.subjectCode;
-            slot.years[yearInd].teacherNickName = subject.teacherNickName;
+            slot.years[yearInd].professorNickName = subject.professorNickName;
           }
+          this.labInfo[subject.semester] = true;
         } else {
           continue;
         }
       } else {
         timeSlot.years[yearIndex].subjectCode = subject.subjectCode;
-        timeSlot.years[yearIndex].teacherNickName = subject.teacherNickName;
+        timeSlot.years[yearIndex].professorNickName = subject.professorNickName;
       }
       subject.totalLectures--;
       return true;
@@ -191,14 +201,15 @@ const GenerateTimeTable = () => {
       let count = 0;
       while (subject.totalLectures > 0) {
         if (count >= 10) {
-          console.log("Conflict");
+          console.log("Conflict", subject.subjectCode);
           break;
         }
         for (let i = 0; i < timeTableArray.length; i++) {
           const day = timeTableArray[i];
           // console.log(day);
           if (subject.totalLectures <= 0) break;
-
+          if (day.labInfo[subject.semester] && subject.slotRequired > 1)
+            continue;
           day.addSubject(subject);
         }
         count++;

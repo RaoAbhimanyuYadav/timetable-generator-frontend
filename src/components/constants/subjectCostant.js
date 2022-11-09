@@ -36,7 +36,7 @@ export const formInfo = [
     default: "1",
   },
   {
-    label: "Lectures in a week",
+    label: "Slot Required",
     type: "number",
     key: "slot_required",
     default: "1",
