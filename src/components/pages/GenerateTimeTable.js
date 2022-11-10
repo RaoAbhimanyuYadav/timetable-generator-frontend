@@ -34,7 +34,7 @@ class TimeSlot {
   }
 }
 class Day {
-  constructor({ day, years }) {
+  constructor({ day, years, optimalSlots }) {
     this.day = day.day;
     this.startTime = this.intoMinutes(day.start_time);
     this.endTime = this.intoMinutes(day.end_time);
@@ -43,6 +43,8 @@ class Day {
     this.oneSlotTime = this.intoMinutes(day.one_slot_interval);
     this.totalSlots = this.calculateSlots();
     this.labInfo = this.createObject(years);
+    this.optimalSlots = { ...optimalSlots };
+    this.subjectAdded = [];
     this.timeSlots = Array(this.totalSlots)
       .fill(0)
       .map((time, index) => {
@@ -121,12 +123,24 @@ class Day {
     }
 
     for (let j = timeSlotIndex; j < this.timeSlots.length; j++) {
+      if (count < 2 && this.optimalSlots[subject.semester] <= 0) {
+        break;
+      }
+
       if (
-        count < 5 &&
+        count < 4 &&
         j !== timeSlotIndex &&
         subject.timeSlotAllotedIndex !== null
-      )
+      ) {
         break;
+      }
+
+      if (
+        count < 6 &&
+        this.subjectAdded.find((x) => x === subject.subjectCode)
+      ) {
+        break;
+      }
 
       const timeSlot = this.timeSlots[j];
       if (timeSlot.isLunch) continue;
@@ -150,6 +164,7 @@ class Day {
             );
             slot.years[yearInd].subjectCode = subject.subjectCode;
             slot.years[yearInd].professorNickName = subject.professorNickName;
+            this.optimalSlots[subject.semester]--;
           }
           this.labInfo[subject.semester] = true;
         } else {
@@ -158,8 +173,10 @@ class Day {
       } else {
         timeSlot.years[yearIndex].subjectCode = subject.subjectCode;
         timeSlot.years[yearIndex].professorNickName = subject.professorNickName;
+        this.optimalSlots[subject.semester]--;
       }
       // console.log(subject.subjectCode);
+      this.subjectAdded.push(subject.subjectCode);
       subject.timeSlotAllotedIndex = j;
       subject.totalLectures--;
       return true;
@@ -197,6 +214,20 @@ const GenerateTimeTable = () => {
       return resp.data;
     });
 
+    let totalDays = timingResponse.length;
+    let optimalSlotsRequired = {};
+    yearResponse.forEach((year) => {
+      let sem = year.semester;
+      let cnt = 0;
+      subjectResponse.forEach((sub) => {
+        if (sub.year.semester === sem) {
+          cnt += +sub.lecture_in_a_week * +sub.slot_required;
+        }
+      });
+      cnt = Math.floor(cnt / totalDays) + 2;
+      optimalSlotsRequired[sem] = cnt - 1;
+    });
+    console.log(optimalSlotsRequired);
     let subjectsArray = subjectResponse.map((obj) => {
       return new Subject(obj);
     });
@@ -209,7 +240,11 @@ const GenerateTimeTable = () => {
     });
 
     let timeTableArray = timingResponse.map((day) => {
-      return new Day({ day: day, years: yearResponse });
+      return new Day({
+        day: day,
+        years: yearResponse,
+        optimalSlots: optimalSlotsRequired,
+      });
     });
 
     for (let k = 0; k < subjectsArray.length; k++) {
