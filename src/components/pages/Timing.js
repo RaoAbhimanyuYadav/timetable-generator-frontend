@@ -18,7 +18,7 @@ const getData = (setData) => {
         setData(res.data);
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err.response.data.detail));
 };
 
 const Timing = () => {

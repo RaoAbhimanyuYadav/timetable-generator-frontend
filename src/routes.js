@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Navbar from "./components/HOC/Navbar";
 import ErrorPage from "./components/common/ErrorPage";
@@ -10,24 +10,32 @@ import Professor from "./components/pages/Professor";
 import Subject from "./components/pages/Subject";
 import Timing from "./components/pages/Timing";
 import GenerateTimeTable from "./components/pages/GenerateTimeTable";
+import AuthContext from "./components/store/auth-context";
+import { useContext } from "react";
 
-const routes = () => {
+const Routing = () => {
+  const authCntxt = useContext(AuthContext);
+
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/year" element={<Year />} />
-        <Route path="/professor" element={<Professor />} />
-        <Route path="/subject" element={<Subject />} />
-        <Route path="/timing" element={<Timing />} />
-        <Route path="/generate" element={<GenerateTimeTable />} />
+        {authCntxt.isLoggedIn && (
+          <>
+            <Route path="/year" element={<Year />} />
+            <Route path="/professor" element={<Professor />} />
+            <Route path="/subject" element={<Subject />} />
+            <Route path="/timing" element={<Timing />} />
+            <Route path="/generate" element={<GenerateTimeTable />} />
+          </>
+        )}
         <Route path="*" element={<ErrorPage />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
 
-export default routes;
+export default Routing;

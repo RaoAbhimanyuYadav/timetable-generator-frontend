@@ -1,5 +1,7 @@
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
+import { AuthContextProvider } from "./components/store/auth-context";
 import Routes from "./routes";
 
 const darkTheme = createTheme({
@@ -10,10 +12,14 @@ const darkTheme = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Routes />
-    </ThemeProvider>
+    <BrowserRouter>
+      <AuthContextProvider>
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <Routes />
+        </ThemeProvider>
+      </AuthContextProvider>
+    </BrowserRouter>
   );
 }
 

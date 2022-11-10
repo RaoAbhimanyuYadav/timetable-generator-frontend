@@ -9,8 +9,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link, useNavigate } from "react-router-dom";
-import Axios from "../Api";
+import { Link } from "react-router-dom";
+import AuthContext from "../store/auth-context";
+
 function Copyright(props) {
   return (
     <Typography
@@ -29,7 +30,8 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const navigate = useNavigate();
+  const authCntxt = React.useContext(AuthContext);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,12 +42,7 @@ export default function SignUp() {
       first_name: data.get("firstName"),
       last_name: data.get("lastName"),
     };
-    Axios.post("register/", body)
-      .then((response) => {
-        localStorage.setItem("authToken", JSON.stringify(response.data));
-        return navigate("/");
-      })
-      .catch((err) => console.log(err.response.data.detail));
+    authCntxt.register(body);
   };
 
   return (

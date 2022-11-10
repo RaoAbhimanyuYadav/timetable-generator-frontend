@@ -10,8 +10,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import Axios from "../Api";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import AuthContext from "../store/auth-context";
 
 function Copyright(props) {
   return (
@@ -31,7 +31,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
-  const navigate = useNavigate();
+  const authCntxt = React.useContext(AuthContext);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -39,12 +39,7 @@ export default function SignIn() {
       username: data.get("email"),
       password: data.get("password"),
     };
-    Axios.post("login/token/", body)
-      .then((response) => {
-        localStorage.setItem("authToken", JSON.stringify(response.data));
-        return navigate("/");
-      })
-      .catch((err) => console.log(err.response.data.detail));
+    authCntxt.login(body);
   };
 
   return (

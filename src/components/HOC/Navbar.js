@@ -12,12 +12,15 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../store/auth-context";
 
 const pages = ["Timing", "Year", "Professor", "Subject", "Generate"];
 const settings = ["Logout"];
 
 function Navbar() {
+  const navigate = useNavigate();
+  const authCntxt = React.useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -69,32 +72,34 @@ function Navbar() {
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem onClick={handleCloseNavMenu} key={page}>
-                  <Link to={`${page.toLowerCase()}`}>
-                    <Typography textAlign="center">{page}s</Typography>
-                  </Link>
-                </MenuItem>
-              ))}
-            </Menu>
+            {authCntxt.isLoggedIn && (
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                {pages.map((page) => (
+                  <MenuItem onClick={handleCloseNavMenu} key={page}>
+                    <Link to={`${page.toLowerCase()}`}>
+                      <Typography textAlign="center">{page}s</Typography>
+                    </Link>
+                  </MenuItem>
+                ))}
+              </Menu>
+            )}
           </Box>
           <Link to="/">
             <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -115,18 +120,20 @@ function Navbar() {
               LOGO
             </Typography>
           </Link>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Link to={`${page.toLowerCase()}`} key={page}>
-                <Button
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page}s
-                </Button>
-              </Link>
-            ))}
-          </Box>
+          {authCntxt.isLoggedIn && (
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              {pages.map((page) => (
+                <Link to={`${page.toLowerCase()}`} key={page}>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    {page}s
+                  </Button>
+                </Link>
+              ))}
+            </Box>
+          )}
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
@@ -151,8 +158,19 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem
+                  key={setting}
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    if (authCntxt.isLoggedIn) authCntxt.logout();
+                    else {
+                      navigate("/login");
+                    }
+                  }}
+                >
+                  <Typography textAlign="center">
+                    {authCntxt.isLoggedIn ? setting : "Login"}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
