@@ -184,13 +184,18 @@ class Day {
     return false;
   }
 }
-
+function calculateTotalLectures(subject) {
+  let num =
+    subject.whole_lecture_in_a_week +
+    subject.group_lecture_in_a_week * subject.year.total_groups;
+  return num;
+}
 class Subject {
   constructor(subject) {
     this.subjectCode = subject.code;
     this.professorNickName = subject.teacher.nick_name;
     this.semester = subject.year.semester;
-    this.totalLectures = subject.lecture_in_a_week;
+    this.totalLectures = calculateTotalLectures(subject);
     this.slotRequired = subject.slot_required;
     this.subjectName = subject.name;
     this.ProfessorName = subject.teacher.name;
@@ -221,7 +226,7 @@ const GenerateTimeTable = () => {
       let cnt = 0;
       subjectResponse.forEach((sub) => {
         if (sub.year.semester === sem) {
-          cnt += +sub.lecture_in_a_week * +sub.slot_required;
+          cnt += calculateTotalLectures(sub) * +sub.slot_required;
         }
       });
       cnt = Math.floor(cnt / totalDays) + 2;
