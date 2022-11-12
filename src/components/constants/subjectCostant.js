@@ -1,20 +1,22 @@
 export const bodyDataKey = [
   "name",
   "code",
-  "lecture_in_a_week",
+  "whole_lecture_in_a_week",
   "slot_required",
   "teacher",
   "year",
+  "group_lecture_in_a_week",
 ];
 
 export const URL = "subject/";
 export const headData = [
   "Name",
   "Subject Code",
-  "Lectures in a week",
+  "Total Lectures in a week",
   "Slot Required",
   "Teacher",
   "Semester, Room Number",
+  "Groups Lectures in a week",
 ];
 export const formInfo = [
   {
@@ -30,16 +32,16 @@ export const formInfo = [
     default: "",
   },
   {
-    label: "Lectures in a week",
+    label: "Total Lectures in a week",
     type: "number",
-    key: "lecture_in_a_week",
-    default: "1",
+    key: "whole_lecture_in_a_week",
+    default: 1,
   },
   {
     label: "Slot Required",
     type: "number",
     key: "slot_required",
-    default: "1",
+    default: 1,
   },
   {
     label: "Professor",
@@ -60,5 +62,11 @@ export const formInfo = [
     value: "semester",
     URL: "year/",
     default: "",
+  },
+  {
+    label: "Group Lectures in a week",
+    type: "number",
+    key: "group_lecture_in_a_week",
+    default: 0,
   },
 ];
