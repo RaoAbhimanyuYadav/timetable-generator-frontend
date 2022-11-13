@@ -15,7 +15,7 @@ export const headData = [
   "Total Lectures in a week",
   "Slot Required",
   "Teacher",
-  "Semester, Room Number",
+  "Semester, Room",
   "Groups Lectures in a week",
 ];
 export const formInfo = [

@@ -84,11 +84,16 @@ const TableLayout = ({
                     return (
                       <CustomCell key={index}>
                         <CellInsideWrapper>
-                          {typeof obj[instance] !== "object"
-                            ? obj[instance]
-                            : instance === "teacher"
-                            ? `${obj[instance].name}(${obj[instance].nick_name})`
-                            : `${obj[instance].semester}, ${obj[instance].room}`}
+                          {typeof obj[instance] !== "object" ? (
+                            obj[instance]
+                          ) : instance === "teacher" ? (
+                            <>
+                              {obj[instance].name}
+                              <br />({obj[instance].nick_name})
+                            </>
+                          ) : (
+                            `${obj[instance].semester}, ${obj[instance].room}`
+                          )}
                         </CellInsideWrapper>
                       </CustomCell>
                     );

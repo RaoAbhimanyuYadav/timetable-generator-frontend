@@ -8,11 +8,9 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import NITHLogo from "../../assests/nith-logo.png";
 
@@ -21,6 +19,7 @@ const settings = ["Logout"];
 
 function Navbar() {
   const navigate = useNavigate();
+
   const authCntxt = React.useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -80,23 +79,31 @@ function Navbar() {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem onClick={handleCloseNavMenu} key={page}>
-                    <Link
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    key={page}
+                    sx={{ minHeight: "auto" }}
+                  >
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "activeRouteM" : ""
+                      }
                       to={`${page.toLowerCase()}`}
                       style={{
                         textAlign: "center",
                         textDecoration: "none",
                         color: "#000",
                         fontFamily: "monospace",
+                        fontSize: "12px",
                       }}
                     >
                       {page}s
-                    </Link>
+                    </NavLink>
                   </MenuItem>
                 ))}
               </Menu>
             )}
-            <Link
+            <NavLink
               to="/"
               style={{
                 textDecoration: "none",
@@ -108,7 +115,7 @@ function Navbar() {
               }}
             >
               TimeTable Generator
-            </Link>
+            </NavLink>
           </Box>
 
           <Box
@@ -122,7 +129,7 @@ function Navbar() {
               },
             }}
           >
-            <Link
+            <NavLink
               to="/"
               style={{
                 textDecoration: "none",
@@ -134,7 +141,7 @@ function Navbar() {
               }}
             >
               TimeTable Generator
-            </Link>
+            </NavLink>
             <Box
               sx={{
                 display: { xs: "none", md: "flex" },
@@ -144,7 +151,10 @@ function Navbar() {
             >
               {authCntxt.isLoggedIn &&
                 pages.map((page) => (
-                  <Link
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? "activeRoute" : ""
+                    }
                     to={`${page.toLowerCase()}`}
                     key={page}
                     style={{
@@ -158,7 +168,7 @@ function Navbar() {
                     }}
                   >
                     {page}s
-                  </Link>
+                  </NavLink>
                 ))}
             </Box>
           </Box>
@@ -187,6 +197,7 @@ function Navbar() {
             >
               {settings.map((setting) => (
                 <MenuItem
+                  sx={{ minHeight: "auto" }}
                   key={setting}
                   onClick={() => {
                     handleCloseUserMenu();
@@ -202,7 +213,7 @@ function Navbar() {
                       textDecoration: "none",
                       color: "#000",
                       fontFamily: "monospace",
-                      fontSize: "12px",
+                      fontSize: { xs: "12px", md: "16px" },
                     }}
                   >
                     {authCntxt.isLoggedIn ? setting : "Login"}
