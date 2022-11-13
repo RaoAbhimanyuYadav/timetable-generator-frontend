@@ -1,15 +1,26 @@
-import { Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 
 const Cell = ({ subject }) => {
   return (
-    <Grid item xs={6}>
-      {subject.groupNumber !== 0 && (
-        <Typography>{`G${subject.groupNumber}`}</Typography>
-      )}
+    <>
       <Typography>{subject.subjectCode}</Typography>
-      <Typography>{subject.professorNickName}</Typography>
-    </Grid>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <Typography sx={{ fontSize: "10px" }}>
+          {subject.groupNumber !== 0 ? `G${subject.groupNumber}` : ""}
+        </Typography>
+        <Typography sx={{ fontSize: "10px" }}>
+          {subject.professorNickName}
+        </Typography>
+      </Box>
+    </>
   );
 };
 
