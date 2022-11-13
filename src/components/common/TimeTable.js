@@ -23,6 +23,7 @@ const CellInsideWrapper = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "column",
+  textAlign: "center",
 }));
 
 const TimeTable = ({ year, index, timeTable }) => {

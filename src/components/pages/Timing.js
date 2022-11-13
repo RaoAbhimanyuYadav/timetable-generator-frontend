@@ -1,15 +1,13 @@
-import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-import TableLayout from "../common/TableLayout";
 import Axios from "../Api";
-import AddEditDialog from "../common/AddEditDialog";
 import {
   bodyDataKey,
   URL,
   formInfo,
   headData,
 } from "../constants/timingConstant";
+import PageWrapper from "../HOC/PageWrapper";
 
 const getData = (setData) => {
   Axios.get(URL)
@@ -58,31 +56,15 @@ const Timing = () => {
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "40px 10px",
-        }}
-      >
-        <Typography sx={{ fontSize: "18px", fontWeight: "800" }}>
-          Timing
-        </Typography>
-        <AddEditDialog
-          formInfo={formInfo}
-          formSubmitHandler={formSubmitHandler}
-        />
-      </Box>
-      <TableLayout
-        data={data}
-        headData={headData}
-        bodyDataKey={bodyDataKey}
-        deleteHandler={deleteHandler}
-        formInfo={formInfo}
-        formSubmitHandler={formSubmitHandler}
-      />
-    </>
+    <PageWrapper
+      title={"Timing"}
+      formInfo={formInfo}
+      formSubmitHandler={formSubmitHandler}
+      data={data}
+      headData={headData}
+      bodyDataKey={bodyDataKey}
+      deleteHandler={deleteHandler}
+    />
   );
 };
 

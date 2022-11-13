@@ -17,9 +17,7 @@ export default function ConfirmDelete({ objName, id, deleteHandler }) {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Delete
-      </Button>
+      <Button onClick={handleClickOpen}>Delete</Button>
       <Dialog
         open={open}
         onClose={handleClose}

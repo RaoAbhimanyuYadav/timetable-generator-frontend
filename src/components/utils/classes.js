@@ -1,7 +1,7 @@
 import Axios from "../Api";
 
 export class Year {
-  constructor({ year, isLunch, isGrouping = false }) {
+  constructor({ year, isLunch }) {
     this.semester = year.semester;
     this.subjectCode = isLunch ? "LUNCH" : null;
     this.professorNickName = isLunch ? "" : null;
