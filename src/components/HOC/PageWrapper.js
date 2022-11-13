@@ -13,7 +13,7 @@ const PageWrapper = ({
   deleteHandler,
 }) => {
   return (
-    <Box sx={{ padding: "clamp(12px, 4vw, 48px)" }}>
+    <Box sx={{ padding: "clamp(12px, 4vw, 48px)", overflowX: "scroll" }}>
       <Box
         sx={{
           display: "flex",

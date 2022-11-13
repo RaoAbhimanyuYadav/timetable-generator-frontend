@@ -21,7 +21,7 @@ const TimeTable = ({ year, index, timeTable }) => {
   const componentRef = useRef();
 
   return (
-    <Box sx={{ padding: "40px 40px" }}>
+    <Box sx={{ padding: "40px 40px", overflowX: "scroll" }}>
       <Box
         sx={{
           display: "flex",

@@ -19,7 +19,7 @@ export const CustomButton = styled(Button)(({ theme }) => ({
 }));
 
 export const CustomCell = styled(TableCell)(({ theme }) => ({
-  padding: "clamp(2px,0.4vw ,5px) clamp(4px, 0.8vw,10px)",
+  padding: "10px",
   border: "2px solid #000",
 }));
 
