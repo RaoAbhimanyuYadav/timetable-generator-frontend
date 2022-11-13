@@ -6,7 +6,7 @@ import Routes from "./routes";
 
 const darkTheme = createTheme({
   palette: {
-    mode: "dark",
+    mode: "light",
   },
 });
 

@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../store/auth-context";
+import NITHLogo from "../../assests/nith-logo.png";
 
 const pages = ["Timing", "Year", "Professor", "Subject", "Generate"];
 const settings = ["Logout"];
@@ -43,25 +44,12 @@ function Navbar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link to="/">
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography>
-          </Link>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none", alignItems: "center" },
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -93,52 +81,92 @@ function Navbar() {
               >
                 {pages.map((page) => (
                   <MenuItem onClick={handleCloseNavMenu} key={page}>
-                    <Link to={`${page.toLowerCase()}`}>
-                      <Typography textAlign="center">{page}s</Typography>
+                    <Link
+                      to={`${page.toLowerCase()}`}
+                      style={{
+                        textAlign: "center",
+                        textDecoration: "none",
+                        color: "#000",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      {page}s
                     </Link>
                   </MenuItem>
                 ))}
               </Menu>
             )}
-          </Box>
-          <Link to="/">
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#fff",
                 fontFamily: "monospace",
                 fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
+                letterSpacing: ".05rem",
+                fontSize: "16px",
               }}
             >
-              LOGO
-            </Typography>
-          </Link>
-          {authCntxt.isLoggedIn && (
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Link to={`${page.toLowerCase()}`} key={page}>
-                  <Button
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: "white", display: "block" }}
+              TimeTable Generator
+            </Link>
+          </Box>
+
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: {
+                xs: "none",
+                md: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              },
+            }}
+          >
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#fff",
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".05rem",
+                fontSize: "24px",
+              }}
+            >
+              TimeTable Generator
+            </Link>
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                flexGrow: 1,
+                justifyContent: "center",
+              }}
+            >
+              {authCntxt.isLoggedIn &&
+                pages.map((page) => (
+                  <Link
+                    to={`${page.toLowerCase()}`}
+                    key={page}
+                    style={{
+                      textDecoration: "none",
+                      color: "#fff",
+                      fontFamily: "monospace",
+                      fontWeight: 700,
+                      letterSpacing: ".05rem",
+                      fontSize: "16px",
+                      padding: "10px",
+                    }}
                   >
                     {page}s
-                  </Button>
-                </Link>
-              ))}
+                  </Link>
+                ))}
             </Box>
-          )}
+          </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="NITH Logo" src={NITHLogo} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -168,7 +196,15 @@ function Navbar() {
                     }
                   }}
                 >
-                  <Typography textAlign="center">
+                  <Typography
+                    sx={{
+                      textAlign: "center",
+                      textDecoration: "none",
+                      color: "#000",
+                      fontFamily: "monospace",
+                      fontSize: "12px",
+                    }}
+                  >
                     {authCntxt.isLoggedIn ? setting : "Login"}
                   </Typography>
                 </MenuItem>

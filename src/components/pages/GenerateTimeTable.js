@@ -13,18 +13,21 @@ import Cell from "../common/Cell";
 import ReactToPrint from "react-to-print";
 
 class Year {
-  constructor({ year, isLunch }) {
+  constructor({ year, isLunch, isGrouping = false }) {
     this.semester = year.semester;
     this.subjectCode = isLunch ? "LUNCH" : null;
     this.professorNickName = isLunch ? "" : null;
     this.roomNumber = year.room;
+    this.totalGroups = year.total_groups ? year.total_groups : 0;
+    this.groupNumber = 0;
   }
 }
 
 class TimeSlot {
-  constructor({ isLunch, time, years }) {
+  constructor({ isLunch, time, timeTo, years }) {
     this.isLunch = isLunch;
     this.time = time;
+    this.timeTo = timeTo;
     this.years = years.map((year) => {
       return new Year({
         year: year,
@@ -51,6 +54,7 @@ class Day {
         return new TimeSlot({
           isLunch: this.isLunch(index),
           time: this.calculateSlotTime(index),
+          timeTo: this.calculateSlotTime(index + 1),
           years: years,
         });
       });
@@ -164,6 +168,14 @@ class Day {
             );
             slot.years[yearInd].subjectCode = subject.subjectCode;
             slot.years[yearInd].professorNickName = subject.professorNickName;
+
+            slot.years[yearInd].groupNumber =
+              subject.fullClassLecture <= 0
+                ? ((subject.fullClassLecture * -1) %
+                    slot.years[yearInd].totalGroups) +
+                  1
+                : 0;
+
             this.optimalSlots[subject.semester]--;
           }
           this.labInfo[subject.semester] = true;
@@ -173,12 +185,19 @@ class Day {
       } else {
         timeSlot.years[yearIndex].subjectCode = subject.subjectCode;
         timeSlot.years[yearIndex].professorNickName = subject.professorNickName;
+        timeSlot.years[yearIndex].groupNumber =
+          subject.fullClassLecture <= 0
+            ? ((subject.fullClassLecture * -1) %
+                timeSlot.years[yearIndex].totalGroups) +
+              1
+            : 0;
         this.optimalSlots[subject.semester]--;
       }
       // console.log(subject.subjectCode);
       this.subjectAdded.push(subject.subjectCode);
       subject.timeSlotAllotedIndex = j;
       subject.totalLectures--;
+      subject.fullClassLecture--;
       return true;
     }
     return false;
@@ -201,12 +220,13 @@ class Subject {
     this.ProfessorName = subject.teacher.name;
     this.roomNumber = subject.year.room;
     this.timeSlotAllotedIndex = null;
+    this.fullClassLecture = subject.whole_lecture_in_a_week;
   }
 }
 
 const GenerateTimeTable = () => {
   const [timeTable, setTimeTable] = React.useState([]);
-  const [year, setYear] = React.useState(["1", "3", "5", "7"]);
+  const [year, setYear] = React.useState([]);
 
   const dataCreator = async () => {
     let subjectResponse = await Axios.get("subject/").then((resp) => {
@@ -218,6 +238,11 @@ const GenerateTimeTable = () => {
     let yearResponse = await Axios.get("year/").then((resp) => {
       return resp.data;
     });
+
+    let yearArray = yearResponse.map((year) => {
+      return new Year({ year, isLunch: false });
+    });
+    setYear(yearArray);
 
     let totalDays = timingResponse.length;
     let optimalSlotsRequired = {};
@@ -232,7 +257,6 @@ const GenerateTimeTable = () => {
       cnt = Math.floor(cnt / totalDays) + 2;
       optimalSlotsRequired[sem] = cnt - 1;
     });
-    console.log(optimalSlotsRequired);
     let subjectsArray = subjectResponse.map((obj) => {
       return new Subject(obj);
     });
@@ -290,7 +314,9 @@ const GenerateTimeTable = () => {
         {year.map((year, index) => {
           return (
             <div key={index}>
-              <h1 style={{ textAlign: "center" }}>table {year}</h1>
+              <h1 style={{ textAlign: "center" }}>
+                Semester: {year.semester} & Room : {year.roomNumber}
+              </h1>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -299,7 +325,12 @@ const GenerateTimeTable = () => {
                       timeTable.map((day, i) => {
                         if (i === 0)
                           return day.timeSlots.map((slot, i) => {
-                            return <TableCell key={i}>{slot.time}</TableCell>;
+                            return (
+                              <TableCell key={i}>
+                                <p>{slot.time}</p>
+                                <p>{slot.timeTo}</p>
+                              </TableCell>
+                            );
                           });
                         return "";
                       })}
@@ -315,6 +346,9 @@ const GenerateTimeTable = () => {
                             <TableCell key={i}>
                               <Grid container>
                                 {timeSlot.years.map((year, i) => {
+                                  if (year.isGrouping) {
+                                    year.isGroupWiseLecture++;
+                                  }
                                   if (i === index)
                                     return <Cell key={i} subject={year} />;
                                   else return "";
