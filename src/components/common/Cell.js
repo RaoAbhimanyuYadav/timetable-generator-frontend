@@ -1,10 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import React from "react";
+
+import { CustomTypography } from "../utils/customComponents";
 
 const Cell = ({ subject }) => {
   return (
     <>
-      <Typography>{subject.subjectCode}</Typography>
+      <CustomTypography>{subject.subjectCode}</CustomTypography>
       <Box
         sx={{
           display: "flex",
@@ -13,12 +15,12 @@ const Cell = ({ subject }) => {
           width: "100%",
         }}
       >
-        <Typography sx={{ fontSize: "10px" }}>
+        <CustomTypography sx={{ fontSize: "10px" }}>
           {subject.groupNumber !== 0 ? `G${subject.groupNumber}` : ""}
-        </Typography>
-        <Typography sx={{ fontSize: "10px" }}>
+        </CustomTypography>
+        <CustomTypography sx={{ fontSize: "10px" }}>
           {subject.professorNickName}
-        </Typography>
+        </CustomTypography>
       </Box>
     </>
   );

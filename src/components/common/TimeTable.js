@@ -2,29 +2,20 @@ import React, { useRef } from "react";
 import {
   Box,
   Button,
-  styled,
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
 } from "@mui/material";
 import ReactToPrint from "react-to-print";
 
 import Cell from "./Cell";
-
-const CustomCell = styled(TableCell)(({ theme }) => ({
-  padding: "5px 10px",
-  border: "2px solid #000",
-}));
-
-const CellInsideWrapper = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  flexDirection: "column",
-  textAlign: "center",
-}));
+import {
+  CustomCell,
+  CellInsideWrapper,
+  CustomTypography,
+  CustomButton,
+} from "../utils/customComponents";
 
 const TimeTable = ({ year, index, timeTable }) => {
   const componentRef = useRef();
@@ -36,28 +27,34 @@ const TimeTable = ({ year, index, timeTable }) => {
           display: "flex",
           flexGrow: 1,
           justifyContent: "flex-end",
-          marginTop: "40px",
+          marginTop: "48px",
         }}
       >
         <ReactToPrint
           trigger={() => (
-            <Button sx={{ textTransform: "none", fontSize: "14px" }}>
-              Print Sem {year.semester}!
-            </Button>
+            <CustomButton>Print Sem {year.semester}!</CustomButton>
           )}
           content={() => componentRef.current}
         />
       </Box>
       <Box ref={componentRef}>
-        <h1 style={{ textAlign: "center" }}>
+        <CustomTypography
+          sx={{
+            fontSize: "clamp(16px,2vw,24px)",
+            marginBottom: "24px",
+            fontWeight: "700",
+          }}
+        >
           Semester: {year.semester} & Room : {year.roomNumber}
-        </h1>
+        </CustomTypography>
 
         <Table>
           <TableHead>
             <TableRow>
               <CustomCell>
-                <CellInsideWrapper>From</CellInsideWrapper>
+                <CellInsideWrapper sx={{ fontWeight: "700" }}>
+                  From <br /> To
+                </CellInsideWrapper>
               </CustomCell>
               {timeTable.length > 0 &&
                 timeTable.map((day, i) => {
@@ -65,24 +62,9 @@ const TimeTable = ({ year, index, timeTable }) => {
                     return day.timeSlots.map((slot, i) => {
                       return (
                         <CustomCell key={i}>
-                          <CellInsideWrapper>{slot.time}</CellInsideWrapper>
-                        </CustomCell>
-                      );
-                    });
-                  return "";
-                })}
-            </TableRow>
-            <TableRow>
-              <CustomCell>
-                <CellInsideWrapper>To</CellInsideWrapper>
-              </CustomCell>
-              {timeTable.length > 0 &&
-                timeTable.map((day, i) => {
-                  if (i === 0)
-                    return day.timeSlots.map((slot, i) => {
-                      return (
-                        <CustomCell key={i}>
-                          <CellInsideWrapper>{slot.timeTo}</CellInsideWrapper>
+                          <CellInsideWrapper sx={{ fontWeight: "700" }}>
+                            {slot.time} <br /> {slot.timeTo}
+                          </CellInsideWrapper>
                         </CustomCell>
                       );
                     });
@@ -95,7 +77,9 @@ const TimeTable = ({ year, index, timeTable }) => {
               return (
                 <TableRow key={day.day}>
                   <CustomCell>
-                    <CellInsideWrapper> {day.day}</CellInsideWrapper>
+                    <CellInsideWrapper sx={{ fontWeight: "700" }}>
+                      {day.day}
+                    </CellInsideWrapper>
                   </CustomCell>
                   {day.timeSlots.map((timeSlot, i) => {
                     return (

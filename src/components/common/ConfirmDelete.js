@@ -1,8 +1,8 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
+
+import { CustomButton, CustomDialogTitle } from "../utils/customComponents";
 
 export default function ConfirmDelete({ objName, id, deleteHandler }) {
   const [open, setOpen] = React.useState(false);
@@ -17,19 +17,22 @@ export default function ConfirmDelete({ objName, id, deleteHandler }) {
 
   return (
     <div>
-      <Button onClick={handleClickOpen}>Delete</Button>
+      <CustomButton onClick={handleClickOpen}>Delete</CustomButton>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
+        <CustomDialogTitle
+          id="alert-dialog-title"
+          sx={{ fontSize: "clamp(10px,2vw,24px)" }}
+        >
           {`Are you sure want to delete ${objName} row?`}
-        </DialogTitle>
+        </CustomDialogTitle>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button
+          <CustomButton onClick={handleClose}>Cancel</CustomButton>
+          <CustomButton
             onClick={() => {
               handleClose();
               deleteHandler(id);
@@ -37,7 +40,7 @@ export default function ConfirmDelete({ objName, id, deleteHandler }) {
             autoFocus
           >
             Yes, Delete
-          </Button>
+          </CustomButton>
         </DialogActions>
       </Dialog>
     </div>

@@ -1,7 +1,7 @@
-import { MenuItem, TextField } from "@mui/material";
 import React from "react";
 
 import Axios from "../Api";
+import { CustomMenuItem, CustomTextField } from "../utils/customComponents";
 
 const getData = (setData, obj, setLoading) => {
   Axios.get(obj.URL)
@@ -29,7 +29,7 @@ const AsyncSelect = ({ obj, data, handleOnChange }) => {
       {loading ? (
         "Loading...."
       ) : (
-        <TextField
+        <CustomTextField
           select
           id={obj.id}
           name={obj.id}
@@ -39,11 +39,11 @@ const AsyncSelect = ({ obj, data, handleOnChange }) => {
           value={data[obj.id]}
         >
           {options.map((option) => (
-            <MenuItem key={option.key} value={option.key}>
+            <CustomMenuItem key={option.key} value={option.key}>
               {option.value}
-            </MenuItem>
+            </CustomMenuItem>
           ))}
-        </TextField>
+        </CustomTextField>
       )}
     </>
   );

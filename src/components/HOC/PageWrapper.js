@@ -13,7 +13,7 @@ const PageWrapper = ({
   deleteHandler,
 }) => {
   return (
-    <Box sx={{ padding: "24px" }}>
+    <Box sx={{ padding: "clamp(12px, 4vw, 48px)" }}>
       <Box
         sx={{
           display: "flex",
@@ -24,7 +24,7 @@ const PageWrapper = ({
       >
         <Typography
           sx={{
-            fontSize: "24px",
+            fontSize: "clamp(10px,2vw,24px)",
             fontWeight: "800",
             fontFamily: "monospace",
             letterSpacing: "0.1rem",

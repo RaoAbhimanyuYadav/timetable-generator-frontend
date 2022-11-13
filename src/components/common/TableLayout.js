@@ -1,28 +1,8 @@
-import {
-  Box,
-  styled,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 
 import AddEditDialog from "./AddEditDialog";
 import ConfirmDelete from "./ConfirmDelete";
-
-const CustomCell = styled(TableCell)(({ theme }) => ({
-  padding: "5px 10px",
-  border: "1px solid #000",
-}));
-
-const CellInsideWrapper = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  flexDirection: "column",
-  textAlign: "center",
-}));
+import { CustomCell, CellInsideWrapper } from "../utils/customComponents";
 
 const TableLayout = ({
   data,
@@ -50,7 +30,9 @@ const TableLayout = ({
                 {headData.map((instance, index) => {
                   return (
                     <CustomCell key={index}>
-                      <CellInsideWrapper>{instance}</CellInsideWrapper>
+                      <CellInsideWrapper sx={{ fontWeight: "700" }}>
+                        {instance}
+                      </CellInsideWrapper>
                     </CustomCell>
                   );
                 })}
@@ -67,7 +49,9 @@ const TableLayout = ({
               {headData.map((instance, index) => {
                 return (
                   <CustomCell key={index}>
-                    <CellInsideWrapper>{instance}</CellInsideWrapper>
+                    <CellInsideWrapper sx={{ fontWeight: "700" }}>
+                      {instance}
+                    </CellInsideWrapper>
                   </CustomCell>
                 );
               })}
