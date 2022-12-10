@@ -16,6 +16,7 @@ import {
   CustomTypography,
   CustomButton,
 } from "../utils/customComponents";
+import { TEACHER_COLOR } from "../constants/TeacherColor";
 
 const TimeTable = ({ year, index, timeTable }) => {
   const componentRef = useRef();
@@ -84,7 +85,11 @@ const TimeTable = ({ year, index, timeTable }) => {
                   {day.timeSlots.map((timeSlot, i) => {
                     return (
                       <CustomCell key={i}>
-                        <CellInsideWrapper>
+                        <CellInsideWrapper
+                          sx={{
+                            margin: "-10px",
+                          }}
+                        >
                           {timeSlot.years.map((year, i) => {
                             if (year.isGrouping) {
                               year.isGroupWiseLecture++;

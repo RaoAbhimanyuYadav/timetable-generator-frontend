@@ -2,10 +2,21 @@ import { Box } from "@mui/material";
 import React from "react";
 
 import { CustomTypography } from "../utils/customComponents";
+import { TEACHER_COLOR } from "../constants/TeacherColor";
 
 const Cell = ({ subject }) => {
+  const customCSS = TEACHER_COLOR.find(
+    (obj) => obj.nickname === subject.professorNickName
+  );
   return (
-    <>
+    <Box
+      sx={{
+        color: customCSS ? customCSS.color : "#000",
+        backgroundColor: customCSS ? customCSS.backgroundColor : "#fff",
+        width: "100%",
+        padding: "10px",
+      }}
+    >
       <CustomTypography>{subject.subjectCode}</CustomTypography>
       <Box
         sx={{
@@ -22,7 +33,7 @@ const Cell = ({ subject }) => {
           {subject.professorNickName}
         </CustomTypography>
       </Box>
-    </>
+    </Box>
   );
 };
 
