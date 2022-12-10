@@ -76,7 +76,7 @@ const TableLayout = ({
                               <br />({obj[instance].nick_name})
                             </>
                           ) : (
-                            ``
+                            `${obj[instance].semester}`
                           )}
                         </CellInsideWrapper>
                       </CustomCell>
