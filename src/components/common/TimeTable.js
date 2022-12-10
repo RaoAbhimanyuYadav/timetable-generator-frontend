@@ -46,7 +46,7 @@ const TimeTable = ({ year, index, timeTable }) => {
             fontWeight: "700",
           }}
         >
-          Semester: {year.semester} & Room : {year.roomNumber}
+          Semester: {year.semester}
         </CustomTypography>
 
         <Table>

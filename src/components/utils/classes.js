@@ -5,7 +5,7 @@ export class Year {
     this.semester = year.semester;
     this.subjectCode = isLunch ? "LUNCH" : null;
     this.professorNickName = isLunch ? "" : null;
-    this.roomNumber = year.room;
+    this.room = "";
     this.totalGroups = year.total_groups ? year.total_groups : 0;
     this.groupNumber = 0;
     this.isLab = false;
@@ -186,6 +186,7 @@ export class Day {
             );
             // Alot subject code and professor & lab is already printed & it is lab on that time
             slot.years[yearInd].subjectCode = subject.subjectCode;
+            slot.years[yearInd].room = subject.room;
             slot.years[yearInd].professorNickName = subject.professorNickName;
             slot.years[yearInd].labAlreadyPrinted = true;
             slot.years[yearInd].isLab = true;
@@ -215,6 +216,7 @@ export class Day {
       } else {
         // Subject require only one time slot so alot subject & professor & if for group then group no.
         timeSlot.years[yearIndex].subjectCode = subject.subjectCode;
+        timeSlot.years[yearIndex].room = subject.room;
         timeSlot.years[yearIndex].professorNickName = subject.professorNickName;
         timeSlot.years[yearIndex].groupNumber =
           subject.fullClassLecture <= 0
@@ -254,8 +256,8 @@ export class Subject {
     this.totalLectures = calculateTotalLectures(subject);
     this.slotRequired = subject.slot_required;
     this.subjectName = subject.name;
+    this.room = subject.room;
     this.ProfessorName = subject.teacher.name;
-    this.roomNumber = subject.year.room;
     this.timeSlotAllotedIndex = null;
     this.fullClassLecture = subject.whole_lecture_in_a_week;
   }

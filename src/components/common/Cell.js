@@ -6,6 +6,11 @@ import { CustomTypography } from "../utils/customComponents";
 const Cell = ({ subject }) => {
   return (
     <>
+      <Box sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}>
+        <CustomTypography sx={{ fontSize: "10px" }}>
+          {subject.room !== 0 ? `G${subject.room}` : ""}
+        </CustomTypography>
+      </Box>
       <CustomTypography>{subject.subjectCode}</CustomTypography>
       <Box
         sx={{

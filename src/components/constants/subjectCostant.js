@@ -5,6 +5,7 @@ export const bodyDataKey = [
   "slot_required",
   "teacher",
   "year",
+  "room",
   "group_lecture_in_a_week",
 ];
 
@@ -15,7 +16,8 @@ export const headData = [
   "Total Lectures in a week",
   "Slot Required",
   "Teacher",
-  "Semester, Room",
+  "Semester",
+  "Room",
   "Groups Lectures in a week",
 ];
 export const formInfo = [
@@ -36,6 +38,12 @@ export const formInfo = [
     type: "number",
     key: "whole_lecture_in_a_week",
     default: 1,
+  },
+  {
+    label: "Room",
+    type: "text",
+    key: "room",
+    default: "G1",
   },
   {
     label: "Slot Required",
