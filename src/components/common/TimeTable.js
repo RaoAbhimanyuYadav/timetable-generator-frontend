@@ -102,6 +102,11 @@ const TimeTable = ({ year, index, timeTable }) => {
                                 backgroundColor: customCSS
                                   ? customCSS.backgroundColor
                                   : "#fff",
+                                padding: year.isLab
+                                  ? 0
+                                  : year.groupNumber > 0
+                                  ? 0
+                                  : "10px",
                               }}
                             >
                               <CellInsideWrapper>
