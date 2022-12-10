@@ -8,6 +8,8 @@ export class Year {
     this.roomNumber = year.room;
     this.totalGroups = year.total_groups ? year.total_groups : 0;
     this.groupNumber = 0;
+    this.isLab = false;
+    this.labAlreadyPrinted = false;
   }
 }
 
@@ -182,9 +184,11 @@ export class Day {
             let yearInd = slot.years.findIndex(
               (year) => year.semester === subject.semester
             );
-            // Alot subject code and professor on that time
+            // Alot subject code and professor & lab is already printed & it is lab on that time
             slot.years[yearInd].subjectCode = subject.subjectCode;
             slot.years[yearInd].professorNickName = subject.professorNickName;
+            slot.years[yearInd].labAlreadyPrinted = true;
+            slot.years[yearInd].isLab = true;
 
             // if lecture is to be alloted for a group then decide group Number
             slot.years[yearInd].groupNumber =
@@ -197,6 +201,12 @@ export class Day {
             // reduce optimalSlots for that day
             this.optimalSlots[subject.semester]--;
           }
+          // to make the first instance of labAlready printed to false so that timetable know from this point lab start
+          this.timeSlots[j].years[
+            this.timeSlots[j].years.findIndex(
+              (year) => year.semester === subject.semester
+            )
+          ].labAlreadyPrinted = false;
           // lab is alloted for this day so no other lab will be alloted
           this.labInfo[subject.semester] = true;
         } else {

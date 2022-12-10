@@ -83,24 +83,34 @@ const TimeTable = ({ year, index, timeTable }) => {
                     </CellInsideWrapper>
                   </CustomCell>
                   {day.timeSlots.map((timeSlot, i) => {
-                    return (
-                      <CustomCell key={i}>
-                        <CellInsideWrapper
-                          sx={{
-                            margin: "-10px",
-                          }}
-                        >
-                          {timeSlot.years.map((year, i) => {
-                            if (year.isGrouping) {
-                              year.isGroupWiseLecture++;
-                            }
-                            if (i === index)
-                              return <Cell key={i} subject={year} />;
-                            else return "";
-                          })}
-                        </CellInsideWrapper>
-                      </CustomCell>
-                    );
+                    return timeSlot.years.map((year, i) => {
+                      const customCSS = TEACHER_COLOR.find(
+                        (obj) => obj.nickname === year.professorNickName
+                      );
+                      if (year.isGrouping) {
+                        year.isGroupWiseLecture++;
+                      }
+                      if (i === index) {
+                        if (year.isLab && year.labAlreadyPrinted) return "";
+                        else
+                          return (
+                            <CustomCell
+                              key={i}
+                              colSpan={year.isLab ? 2 : 1}
+                              sx={{
+                                color: customCSS ? customCSS.color : "#000",
+                                backgroundColor: customCSS
+                                  ? customCSS.backgroundColor
+                                  : "#fff",
+                              }}
+                            >
+                              <CellInsideWrapper>
+                                <Cell key={i} subject={year} />
+                              </CellInsideWrapper>
+                            </CustomCell>
+                          );
+                      } else return "";
+                    });
                   })}
                 </TableRow>
               );
