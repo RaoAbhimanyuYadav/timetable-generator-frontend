@@ -1,13 +1,8 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import AddEditDialog from "./AddEditDialog";
+import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 
+import AddEditDialog from "./AddEditDialog";
 import ConfirmDelete from "./ConfirmDelete";
+import { CustomCell, CellInsideWrapper } from "../utils/customComponents";
 
 const TableLayout = ({
   data,
@@ -33,10 +28,16 @@ const TableLayout = ({
             <TableHead>
               <TableRow>
                 {headData.map((instance, index) => {
-                  return <TableCell key={index}>{instance}</TableCell>;
+                  return (
+                    <CustomCell key={index}>
+                      <CellInsideWrapper sx={{ fontWeight: "700" }}>
+                        {instance}
+                      </CellInsideWrapper>
+                    </CustomCell>
+                  );
                 })}
-                <TableCell></TableCell>
-                <TableCell></TableCell>
+                <CustomCell></CustomCell>
+                <CustomCell></CustomCell>
               </TableRow>
             </TableHead>
           </Table>
@@ -46,10 +47,16 @@ const TableLayout = ({
           <TableHead>
             <TableRow>
               {headData.map((instance, index) => {
-                return <TableCell key={index}>{instance}</TableCell>;
+                return (
+                  <CustomCell key={index}>
+                    <CellInsideWrapper sx={{ fontWeight: "700" }}>
+                      {instance}
+                    </CellInsideWrapper>
+                  </CustomCell>
+                );
               })}
-              <TableCell></TableCell>
-              <TableCell></TableCell>
+              <CustomCell></CustomCell>
+              <CustomCell></CustomCell>
             </TableRow>
           </TableHead>
 
@@ -59,29 +66,40 @@ const TableLayout = ({
                 <TableRow key={obj.id}>
                   {bodyDataKey.map((instance, index) => {
                     return (
-                      <TableCell key={index}>
-                        {typeof obj[instance] !== "object"
-                          ? obj[instance]
-                          : instance === "teacher"
-                          ? `${obj[instance].name}(${obj[instance].nick_name})`
-                          : `${obj[instance].semester}, ${obj[instance].room}`}
-                      </TableCell>
+                      <CustomCell key={index}>
+                        <CellInsideWrapper>
+                          {typeof obj[instance] !== "object" ? (
+                            obj[instance]
+                          ) : instance === "teacher" ? (
+                            <>
+                              {obj[instance].name}
+                              <br />({obj[instance].nick_name})
+                            </>
+                          ) : (
+                            `${obj[instance].semester}`
+                          )}
+                        </CellInsideWrapper>
+                      </CustomCell>
                     );
                   })}
-                  <TableCell>
-                    <AddEditDialog
-                      formInfo={formInfo}
-                      formSubmitHandler={formSubmitHandler}
-                      formData={obj}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <ConfirmDelete
-                      objName={objNameExtractor(obj)}
-                      id={obj.id}
-                      deleteHandler={deleteHandler}
-                    />
-                  </TableCell>
+                  <CustomCell>
+                    <CellInsideWrapper>
+                      <AddEditDialog
+                        formInfo={formInfo}
+                        formSubmitHandler={formSubmitHandler}
+                        formData={obj}
+                      />
+                    </CellInsideWrapper>
+                  </CustomCell>
+                  <CustomCell>
+                    <CellInsideWrapper>
+                      <ConfirmDelete
+                        objName={objNameExtractor(obj)}
+                        id={obj.id}
+                        deleteHandler={deleteHandler}
+                      />
+                    </CellInsideWrapper>
+                  </CustomCell>
                 </TableRow>
               );
             })}

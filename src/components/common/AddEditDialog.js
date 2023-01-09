@@ -1,11 +1,17 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Box, InputLabel, MenuItem, TextField } from "@mui/material";
+import { Box } from "@mui/material";
+
 import AsyncSelect from "./AsyncSelect";
+import {
+  CustomButton,
+  CustomDialogTitle,
+  CustomInputLabel,
+  CustomMenuItem,
+  CustomTextField,
+} from "../utils/customComponents";
 
 export default function AddEditDialog({
   formInfo,
@@ -55,9 +61,9 @@ export default function AddEditDialog({
 
   return (
     <div>
-      <Button onClick={handleClickOpen("paper")}>
+      <CustomButton onClick={handleClickOpen("paper")}>
         {formData ? "Edit" : "Add"}
-      </Button>
+      </CustomButton>
       <Dialog
         maxWidth="xs"
         fullWidth={true}
@@ -67,9 +73,9 @@ export default function AddEditDialog({
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title">
+        <CustomDialogTitle id="scroll-dialog-title">
           {formData ? "Edit" : "Add"}
-        </DialogTitle>
+        </CustomDialogTitle>
         <DialogContent dividers={true}>
           <Box
             component="form"
@@ -80,69 +86,61 @@ export default function AddEditDialog({
             {formInfo.map((obj, index) => {
               return (
                 <Box key={index}>
+                  <CustomInputLabel>{obj.label}</CustomInputLabel>
                   {obj.type === "AsyncChoices" ? (
-                    <>
-                      <InputLabel>{obj.label}</InputLabel>
-                      <AsyncSelect
-                        obj={obj}
-                        handleOnChange={handleOnChange}
-                        data={data}
-                      />
-                    </>
+                    <AsyncSelect
+                      obj={obj}
+                      handleOnChange={handleOnChange}
+                      data={data}
+                    />
                   ) : obj.type === "select" ? (
-                    <>
-                      <InputLabel>{obj.label}</InputLabel>
-                      <TextField
-                        select
-                        autoFocus={index === 0}
-                        id={obj.key}
-                        name={obj.key}
-                        onChange={(e) => {
-                          handleOnChange(e, obj.key, obj);
-                        }}
-                        value={data[obj.key]}
-                      >
-                        {obj.choices.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </>
+                    <CustomTextField
+                      select
+                      autoFocus={index === 0}
+                      id={obj.key}
+                      name={obj.key}
+                      onChange={(e) => {
+                        handleOnChange(e, obj.key, obj);
+                      }}
+                      value={data[obj.key]}
+                    >
+                      {obj.choices.map((option) => (
+                        <CustomMenuItem key={option} value={option}>
+                          {option}
+                        </CustomMenuItem>
+                      ))}
+                    </CustomTextField>
                   ) : (
-                    <>
-                      <InputLabel>{obj.label}</InputLabel>
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        type={obj.type}
-                        id={obj.key}
-                        name={obj.key}
-                        autoFocus={index === 0}
-                        onChange={(e) => {
-                          handleOnChange(e, obj.key, obj);
-                        }}
-                        value={data[obj.key]}
-                      />
-                    </>
+                    <CustomTextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      type={obj.type}
+                      id={obj.key}
+                      name={obj.key}
+                      autoFocus={index === 0}
+                      onChange={(e) => {
+                        handleOnChange(e, obj.key, obj);
+                      }}
+                      value={data[obj.key]}
+                    />
                   )}
                 </Box>
               );
             })}
 
             <DialogActions>
-              <Button
+              <CustomButton
                 onClick={() => {
                   handleClose();
                   handleClear();
                 }}
               >
                 Cancel
-              </Button>
-              <Button type="submit" onClick={handleClose}>
+              </CustomButton>
+              <CustomButton type="submit" onClick={handleClose}>
                 Submit
-              </Button>
+              </CustomButton>
             </DialogActions>
           </Box>
         </DialogContent>

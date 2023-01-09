@@ -8,18 +8,18 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../store/auth-context";
+import NITHLogo from "../../assests/nith-logo.png";
 
 const pages = ["Timing", "Year", "Professor", "Subject", "Generate"];
 const settings = ["Logout"];
 
 function Navbar() {
   const navigate = useNavigate();
+
   const authCntxt = React.useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -43,25 +43,12 @@ function Navbar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link to="/">
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography>
-          </Link>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none", alignItems: "center" },
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -92,53 +79,104 @@ function Navbar() {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem onClick={handleCloseNavMenu} key={page}>
-                    <Link to={`${page.toLowerCase()}`}>
-                      <Typography textAlign="center">{page}s</Typography>
-                    </Link>
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    key={page}
+                    sx={{ minHeight: "auto" }}
+                  >
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "activeRouteM" : ""
+                      }
+                      to={`${page.toLowerCase()}`}
+                      style={{
+                        textAlign: "center",
+                        textDecoration: "none",
+                        color: "#000",
+                        fontFamily: "monospace",
+                        fontSize: "12px",
+                      }}
+                    >
+                      {page}s
+                    </NavLink>
                   </MenuItem>
                 ))}
               </Menu>
             )}
-          </Box>
-          <Link to="/">
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
+            <NavLink
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#fff",
                 fontFamily: "monospace",
                 fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
+                letterSpacing: ".05rem",
+                fontSize: "16px",
               }}
             >
-              LOGO
-            </Typography>
-          </Link>
-          {authCntxt.isLoggedIn && (
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Link to={`${page.toLowerCase()}`} key={page}>
-                  <Button
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: "white", display: "block" }}
+              TimeTable Generator
+            </NavLink>
+          </Box>
+
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: {
+                xs: "none",
+                md: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              },
+            }}
+          >
+            <NavLink
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#fff",
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".05rem",
+                fontSize: "24px",
+              }}
+            >
+              TimeTable Generator
+            </NavLink>
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                flexGrow: 1,
+                justifyContent: "center",
+              }}
+            >
+              {authCntxt.isLoggedIn &&
+                pages.map((page) => (
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? "activeRoute" : ""
+                    }
+                    to={`${page.toLowerCase()}`}
+                    key={page}
+                    style={{
+                      textDecoration: "none",
+                      color: "#fff",
+                      fontFamily: "monospace",
+                      fontWeight: 700,
+                      letterSpacing: ".05rem",
+                      fontSize: "16px",
+                      padding: "10px",
+                    }}
                   >
                     {page}s
-                  </Button>
-                </Link>
-              ))}
+                  </NavLink>
+                ))}
             </Box>
-          )}
+          </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="NITH Logo" src={NITHLogo} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -159,6 +197,7 @@ function Navbar() {
             >
               {settings.map((setting) => (
                 <MenuItem
+                  sx={{ minHeight: "auto" }}
                   key={setting}
                   onClick={() => {
                     handleCloseUserMenu();
@@ -168,7 +207,15 @@ function Navbar() {
                     }
                   }}
                 >
-                  <Typography textAlign="center">
+                  <Typography
+                    sx={{
+                      textAlign: "center",
+                      textDecoration: "none",
+                      color: "#000",
+                      fontFamily: "monospace",
+                      fontSize: { xs: "12px", md: "16px" },
+                    }}
+                  >
                     {authCntxt.isLoggedIn ? setting : "Login"}
                   </Typography>
                 </MenuItem>
